@@ -17,11 +17,23 @@ A module for nginx web server for handling file uploads using multipart/form-dat
     <tbody>
         <tr>
             <td>1.21.0</td>
-            <td>master</td>
+            <td>master (2020)</td>
             <td><ul>
                 <li>docker pull soulteary/prebuilt-nginx-modules:ngx-1.21.0-upload-master</li>
                 <li>docker pull soulteary/prebuilt-nginx-modules:ngx-1.21.0-upload-master-alpine</li>
             </ul></td>
         </tr>
+        <tr>
+            <td>1.21.0</td>
+            <td>2.3.0 (2018)</td>
+            <td><ul>
+                <li>docker pull soulteary/prebuilt-nginx-modules:ngx-1.21.0-upload-2.3.0</li>
+                <li>docker pull soulteary/prebuilt-nginx-modules:ngx-1.21.0-upload-2.3.0-alpine</li>
+            </ul></td>
+        </tr>
     </tbody>
 </table>
+
+## TODO
+
+- try merge changes: https://github.com/fdintino/nginx-upload-module/pull/114
