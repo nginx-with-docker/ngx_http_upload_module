@@ -1,0 +1,25 @@
+ARG NGINX_VERSION=1.21.0
+FROM soulteary/prebuilt-nginx-modules:base-${NGINX_VERSION}-alpine AS Builder
+
+ARG MODULE_CHECKSUM=41e19b64676a53394817361f23d71d256c50f161
+ARG MODULE_VERSION=master
+ARG MODULE_NAME=nginx-upload-module-src
+ARG MODULE_SOURCE=https://github.com/nginx-with-docker/nginx-upload-module-src
+
+RUN apk add unzip
+RUN cd /usr/src && \
+    curl -L "${MODULE_SOURCE}/archive/refs/heads/${MODULE_VERSION}.zip" -o "v${MODULE_VERSION}.zip" && \
+    echo "${MODULE_CHECKSUM}  v${MODULE_VERSION}.zip" | shasum -c && \
+    unzip v${MODULE_VERSION}.zip && \
+    cd /usr/src && \
+    mv ${MODULE_NAME}-${MODULE_VERSION}/ ${MODULE_NAME} && \
+    cd /usr/src/nginx && \
+    CONFARGS=$(nginx -V 2>&1 | sed -n -e 's/^.*arguments: //p') \
+    CONFARGS=${CONFARGS/-Os -fomit-frame-pointer -g/-Os} && \
+    echo $CONFARGS && \
+    ./configure --with-compat $CONFARGS --add-dynamic-module=../${MODULE_NAME}/ && \
+    make modules
+
+FROM scratch
+
+COPY --from=Builder /usr/src/nginx/objs/ngx_http_upload_module.so /
